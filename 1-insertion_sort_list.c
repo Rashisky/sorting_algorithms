@@ -3,50 +3,81 @@
 /**
 * insertion_sort_list - sorts a double linked list of integers in ascending
 * order using the "Insertion sort" algorithm
-* @sort_list: pointer to the first node
+* @list: pointer to the first node to be re-organized
 */
 void insertion_sort_list(listint_t **list)
 {
-    listint_t *temp = *list;
-    listint_t *next_1, *prev_1, *next_2, *prev_2, *temp_2;
-    if (*list)
-    {
-        while(temp->next)
-        {
-            next_1 = temp->next;
-            prev_1 = temp->prev;
-            next_2 = temp->next->next;
-            prev_2 = temp->next->prev;
-            if (temp->n > temp->next->n)
-            {
-                temp->next = next_2;
-                temp->prev = next_1;
-                temp->next->prev = prev_2;
-                next_1->next = temp;
-                next_1->prev = prev_1;
-                temp = next_1;
+	listint_t *temp = *list;
+	listint_t *temp2, *temp3;
 
-                temp_2 = temp->prev;
-                while (temp_2->prev)
-                {
-                    next_1 = temp_2->next;
-                    prev_1 = temp_2->prev;
-                    next_2 = temp_2->next->next;
-                    prev_2 = temp_2->next->prev;
-                    if (temp_2->n > temp_2->next->n)
-                    {
-                        temp_2->next = next_2;
-                        temp_2->prev = next_1;
-                        temp_2->next->prev = prev_2;
-                        next_1->next = temp_2;
-                        next_1->prev = prev_1;
-                        temp_2 = next_1;
-                    }
-                    temp_2 = temp_2->prev;
-                }
-            insertion_sort_list(list);
-            temp = temp->next;
-            }
-        }
-    }
+	if (*list)
+	{
+		while (temp->next)
+		{
+			if (temp->n > temp->next->n)
+			{
+				temp2 = temp3 = temp;
+				temp = temp->next;
+
+				temp2->next = temp->next;
+				if (temp->next)
+					temp->next->prev = temp->prev;
+				temp->next = temp2; /*temp->next = temp->prev*/
+				temp->prev = temp2->prev;
+				if (temp2->prev)
+					temp2->prev->next = temp;
+				/**
+				* The Purpose of the below code is because: the pointer to the first
+				* value of an array is the address of the array itself. This means
+				* that if we interchange the first value node with the next node
+				* (say second), the array will start from the position of the origina
+				* first value before sorting. Thus, the second node which is now
+				* first will not be printed,though, it will point to the array
+				*/
+				if (temp->prev == NULL) /*This Code*/
+					*list = temp;
+				temp2->prev = temp;
+				print_list(*list);
+				temp2 = temp;
+
+				if ((temp2->prev) && (temp2->prev->n > temp2->n))
+					sort_list(list, temp2);
+			}
+			temp = temp->next;
+		}
+	}
+}
+
+
+/**
+* sort_list - sorts a double linked list of integers in ascending
+* order by continuous lower value backward
+* @list: pointer to the original list
+* @data_position: pointer to the data to be moved backward
+*/
+
+void sort_list(listint_t **list, listint_t *data_position)
+{
+	listint_t *temp3, *temp2 = data_position;
+
+	while (temp2->prev)
+	{
+		temp3 = temp2->prev;
+		if (temp3->n > temp2->n)
+		{
+			temp3->next = temp2->next;
+			if (temp2->next)
+				temp2->next->prev = temp2->prev;
+			temp2->next = temp2->prev;
+			temp2->prev = temp3->prev;
+			temp3->prev = temp2;
+			if (temp2->prev)
+				temp2->prev->next = temp2;
+			if (temp2->prev == NULL)
+				*list = temp2;
+			print_list(*list);
+		}
+		else
+		break;
+	}
 }
