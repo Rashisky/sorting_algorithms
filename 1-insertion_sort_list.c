@@ -46,6 +46,7 @@ void insertion_sort_list(listint_t **list)
 			temp = temp->next;
 		}
 	}
+	return;
 }
 
 
