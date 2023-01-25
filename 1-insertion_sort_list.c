@@ -10,7 +10,7 @@ void insertion_sort_list(listint_t **list)
 	listint_t *temp = *list;
 	listint_t *temp2, *temp3;
 
-	if (*list)
+	if (*list && (*list)->next)
 	{
 		while (temp->next)
 		{
@@ -26,15 +26,7 @@ void insertion_sort_list(listint_t **list)
 				temp->prev = temp2->prev;
 				if (temp2->prev)
 					temp2->prev->next = temp;
-				/**
-				* The Purpose of the below code is because: the pointer to the first
-				* value of an array is the address of the array itself. This means
-				* that if we interchange the first value node with the next node
-				* (say second), the array will start from the position of the origina
-				* first value before sorting. Thus, the second node which is now
-				* first will not be printed,though, it will point to the array
-				*/
-				if (temp->prev == NULL) /*This Code*/
+				if (temp->prev == NULL)
 					*list = temp;
 				temp2->prev = temp;
 				print_list(*list);
@@ -46,7 +38,6 @@ void insertion_sort_list(listint_t **list)
 			temp = temp->next;
 		}
 	}
-	return;
 }
 
 
