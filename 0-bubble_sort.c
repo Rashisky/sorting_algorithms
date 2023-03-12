@@ -11,25 +11,40 @@
 
 void bubble_sort(int *array, size_t size)
 {
-	size_t i = 0;
-	size_t j = 0;
-	long int store;
+	size_t i = 0,  len = size, j, count = 0;
 
 	if (array)
 	{
 		for (; i < size; i++)
 		{
-			j = 0;
-			for (; j < size; j++)
+			count = 0;
+			for (j = 0; j < len; j++)
 			{
-				if ((array[j] > array[j + 1]) & (j + 1 < size))
+				if (array[count] > array[j])
 				{
-					store = array[j];
-					array[j] = array[j + 1];
-					array[j + 1] = store;
+					swap(array, count, j);
 					print_array(array, size);
 				}
+				count = j;
 			}
+			len--;
 		}
 	}
+}
+
+
+/**
+ * swap - Interchange the given two values
+ * @array: array list
+ * @i: index position of high_val in the list
+ * @j: index position of low_val in the list
+*/
+
+void swap(int *array, size_t i, size_t j)
+{
+	long int store;
+
+	store = array[i];
+	array[i] = array[j];
+	array[j] = store;
 }
